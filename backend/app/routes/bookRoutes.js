@@ -15,4 +15,7 @@ router.get('/category/:category', bookController.getBooksByCategory);
 // Get books by author name
 router.get('/author/:author', bookController.getBooksByAuthor);
 
+// Search books by title
+router.get('/search', bookController.searchBooksByTitle);
+
 module.exports = router;
