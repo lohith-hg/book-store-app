@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../models/book.dart';
 
 class BooksController extends GetxController {
   final dio = Dio();
+  final searchController = TextEditingController();
   final allBooks = <Book>[].obs;
   final mysteryBooks = <Book>[].obs;
   final historyBooks = <Book>[].obs;
@@ -16,6 +18,8 @@ class BooksController extends GetxController {
   final selectedBook = Book().obs;
   final currectPdfPath = ''.obs;
   final isLoading = false.obs;
+  final activeSearch = false.obs;
+  final isSearching = false.obs;
 
   @override
   void onInit() async {
@@ -46,6 +50,14 @@ class BooksController extends GetxController {
         history.data['books'].map<Book>((e) => Book.fromJson(e)).toList();
     fictionBooks.value =
         fiction.data['books'].map<Book>((e) => Book.fromJson(e)).toList();
+    isLoading.value = false;
+  }
+
+  searchBooks({required String searchText}) async {
+    isLoading.value = true;
+    var books = await dio.get('https://book-store-app-kkpj.onrender.com/books/search?title=$searchText');
+    allBooks.value =
+        books.data['books'].map<Book>((e) => Book.fromJson(e)).toList();
     isLoading.value = false;
   }
 

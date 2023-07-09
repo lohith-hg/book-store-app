@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modules/auth/bindings/auth_binding.dart';
+import '../modules/auth/views/auth_view.dart';
 import '../modules/books/bindings/books_binding.dart';
 import '../modules/books/views/books_view.dart';
 import '../modules/categories/bindings/categories_binding.dart';
@@ -12,6 +15,7 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/wishlist/bindings/wishlist_binding.dart';
 import '../modules/wishlist/views/wishlist_view.dart';
+import '../service/auth_service.dart';
 
 part 'app_routes.dart';
 
@@ -19,6 +23,7 @@ class AppPages {
   AppPages._();
 
   static const INITIAL = Routes.HOME;
+  static const HOME = Routes.HOME;
 
   static final routes = [
     GetPage(
@@ -28,10 +33,9 @@ class AppPages {
         builder: (BuildContext context, GetDelegate delegate,
             GetNavConfig? current) {
           return GetRouterOutlet(
-            initialRoute: _Paths.HOME,
-            // initialRoute: FirebaseAuth.instance.currentUser != null
-            //     ? _Paths.HOME
-            //     : _Paths.AUTH,
+            initialRoute:  (AuthService().isAuthenticated)
+                ? _Paths.HOME
+                : _Paths.HOME,
           );
         },
       ),
@@ -56,12 +60,17 @@ class AppPages {
           page: () => const CategoriesView(),
           binding: CategoriesBinding(),
         ),
+        GetPage(
+          name: _Paths.BOOKS,
+          page: () => const BooksView(),
+          binding: BooksBinding(),
+        ),
+        GetPage(
+          name: _Paths.AUTH,
+          page: () => AuthView(),
+          binding: AuthBinding(),
+        ),
       ],
-    ),
-    GetPage(
-      name: _Paths.BOOKS,
-      page: () => const BooksView(),
-      binding: BooksBinding(),
     ),
   ];
 }

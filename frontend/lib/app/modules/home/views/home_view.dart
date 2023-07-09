@@ -1,3 +1,4 @@
+import 'package:book_store_app/app/modules/auth/views/auth_view.dart';
 import 'package:book_store_app/app/modules/profile/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,9 +19,6 @@ class _HomeViewState extends State<HomeView> {
     BooksView(),
     WishlistView(),
     ProfileView(),
-    // const CosmoDailyView(),
-    // SkyStoriesView(),
-    // VintageSpaceView(),
   ];
 
   void _onItemTapped(int index) {

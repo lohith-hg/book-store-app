@@ -36,7 +36,7 @@ const getUserById = async (userId) => {
 };
 
 const generateToken = (userId) => {
-  const token = jwt.sign({ userId }, 'secret', { expiresIn: '1h' });
+  const token = jwt.sign({ userId }, 'secret', { expiresIn: '30d' });
   return token;
 };
 
