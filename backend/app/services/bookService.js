@@ -22,9 +22,17 @@ const getBooksByAuthor = async (author) => {
   return books;
 };
 
+// Search books by title
+const searchBooksByTitle = async (title) => {
+  const regex = new RegExp(title, 'i');
+  const books = await Book.find({ title: regex });
+  return books;
+};
+
 module.exports = {
   createBook,
   getAllBooks,
   getBooksByCategory,
   getBooksByAuthor,
+  searchBooksByTitle
 };

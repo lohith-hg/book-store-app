@@ -1,4 +1,3 @@
-// Initialization
 const express = require('express');
 const app = express();
 
@@ -23,7 +22,7 @@ app.use('/books', bookRoutes);
 app.use('/users', userRoutes);
 app.use('/orders', orderRoutes);
 
-// Default route
+
 app.get('/', (req, res) => {
   res.send('Welcome to the Bookstore API');
 });

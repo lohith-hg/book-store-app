@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 const registerUser = async (userData) => {
   const user = new User(userData);
@@ -34,6 +35,11 @@ const getUserById = async (userId) => {
   return user;
 };
 
+const generateToken = (userId) => {
+  const token = jwt.sign({ userId }, 'secret', { expiresIn: '1h' });
+  return token;
+};
+
 
 module.exports = {
   registerUser,
@@ -43,4 +49,5 @@ module.exports = {
   purchaseBook,
   getPurchasedBooksByUserId,
   getUserById,
+  generateToken,
 };

@@ -1,10 +1,10 @@
 const bookService = require('../services/bookService');
+const Book = require('../models/book');
 
+ // Create a new book
 const createBook = async (req, res) => {
   try {
     const { id, title, author, description, price, coverImageUrl, category } = req.body;
-
-    // Create a new book using the book service
     const book = await bookService.createBook({
       id,
       title,
@@ -54,9 +54,22 @@ const getBooksByAuthor = async (req, res) => {
   }
 };
 
+// Search books by title
+const searchBooksByTitle = async (req, res) => {
+  try {
+    const { title } = req.query;
+    const books = await bookService.searchBooksByTitle(title);
+    res.status(200).json({ books });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error searching books' });
+  }
+};
+
 module.exports = {
   createBook,
   getAllBooks,
   getBooksByCategory,
   getBooksByAuthor,
+  searchBooksByTitle
 };
