@@ -293,13 +293,6 @@ class AuthView extends GetView<AuthController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 16, bottom: 8),
-        //   child: Text(
-        //     title,
-        //     style: const TextStyle(color: Colors.white),
-        //   ),
-        // ),
         InputText(
           w: Get.width,
           controller: controller,

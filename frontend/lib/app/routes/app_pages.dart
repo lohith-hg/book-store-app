@@ -13,6 +13,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/purchased/bindings/purchased_binding.dart';
+import '../modules/purchased/views/purchased_view.dart';
 import '../modules/wishlist/bindings/wishlist_binding.dart';
 import '../modules/wishlist/views/wishlist_view.dart';
 import '../service/auth_service.dart';
@@ -24,6 +26,7 @@ class AppPages {
 
   static const INITIAL = Routes.HOME;
   static const HOME = Routes.HOME;
+  static const AUTH = Routes.AUTH;
 
   static final routes = [
     GetPage(
@@ -33,9 +36,7 @@ class AppPages {
         builder: (BuildContext context, GetDelegate delegate,
             GetNavConfig? current) {
           return GetRouterOutlet(
-            initialRoute:  (AuthService().isAuthenticated)
-                ? _Paths.HOME
-                : _Paths.HOME,
+            initialRoute: _Paths.AUTH,
           );
         },
       ),
@@ -47,7 +48,7 @@ class AppPages {
         ),
         GetPage(
           name: _Paths.PROFILE,
-          page: () => const ProfileView(),
+          page: () => ProfileView(),
           binding: ProfileBinding(),
         ),
         GetPage(
@@ -71,6 +72,11 @@ class AppPages {
           binding: AuthBinding(),
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.PURCHASED,
+      page: () => const PurchasedView(),
+      binding: PurchasedBinding(),
     ),
   ];
 }

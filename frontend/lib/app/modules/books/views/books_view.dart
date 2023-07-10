@@ -95,16 +95,8 @@ class BooksView extends GetView<BooksController> {
                                     return InkWell(
                                       onTap: () async {
                                         controller.selectedBook.value =
-                                            controller.allBooks[index];
-                                        await controller
-                                            .createFileOfPdfUrl()
-                                            .then((f) {
-                                          controller.currectPdfPath.value =
-                                              f.path;
-                                        });
-                                        Get.to(PDFScreen(
-                                            path: controller
-                                                .currectPdfPath.value));
+                                              controller.allBooks[index];
+                                          Get.to(const BookDetailScreen());
                                       },
                                       child: SizedBox(
                                         height: Get.height / 3.2,

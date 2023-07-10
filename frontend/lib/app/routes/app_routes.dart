@@ -9,6 +9,7 @@ abstract class Routes {
   static const CATEGORIES = _Paths.CATEGORIES;
   static const BOOKS = _Paths.BOOKS;
   static const AUTH = _Paths.AUTH;
+  static const PURCHASED = _Paths.PURCHASED;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const CATEGORIES = '/categories';
   static const BOOKS = '/books';
   static const AUTH = '/auth';
+  static const PURCHASED = '/purchased';
 }

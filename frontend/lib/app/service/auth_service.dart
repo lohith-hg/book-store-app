@@ -1,26 +1,44 @@
 import 'package:dio/dio.dart';
-import 'package:get/get.dart' as g;
+import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../routes/app_pages.dart';
 
-class AuthService extends g.GetxService {
+class AuthService extends GetxService {
   late SharedPreferences prefs;
   static const String apiUrl = 'https://book-store-app-kkpj.onrender.com';
   final Dio dio = Dio();
   var _isAuthenticated = false;
 
   @override
-  void onInit() {
-    setAuthenticated();
+  void onInit() async {
+    print("AuthService started");
+    await checkAuthStatus();
+    await setAuthenticated();
     super.onInit();
   }
 
   bool get isAuthenticated => _isAuthenticated;
 
-  void setAuthenticated() async {
+  setAuthenticated() async {
     prefs = await SharedPreferences.getInstance();
     _isAuthenticated = prefs.getBool("isLoggedIn") ?? false;
+    if (isAuthenticated == true) {
+      Get.rootDelegate.offNamed(AppPages.HOME);
+    }
+    print(_isAuthenticated);
+  }
+
+  checkAuthStatus() async {
+    prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token");
+    print("Is exprieddd");
+    print(token);
+    if (token=='' ||JwtDecoder.isExpired(token!)) {
+      logout();
+      await setAuthenticated();
+    }
   }
 
   Future<void> login(String email, String password) async {
@@ -37,7 +55,7 @@ class AuthService extends g.GetxService {
         final token = response.data['token'];
         print(token);
         prefs.setString("token", token);
-        g.Get.rootDelegate.offNamed(AppPages.HOME);
+        Get.rootDelegate.offNamed(AppPages.HOME);
         prefs.setBool("isLoggedIn", true);
       }
     } catch (e) {
@@ -69,7 +87,7 @@ class AuthService extends g.GetxService {
         final token = response.data['token'];
         print(token);
         prefs.setString("token", token);
-        g.Get.rootDelegate.offNamed(AppPages.HOME);
+        Get.rootDelegate.offNamed(AppPages.HOME);
         prefs.setBool("isLoggedIn", true);
       }
       print("Step 4");
@@ -77,5 +95,11 @@ class AuthService extends g.GetxService {
       print(e.toString());
       throw Exception('Signup failed');
     }
+  }
+
+  logout() {
+    prefs.setString("token", "");
+    prefs.setBool("isLoggedIn", false);
+    Get.rootDelegate.offNamed(AppPages.AUTH);
   }
 }

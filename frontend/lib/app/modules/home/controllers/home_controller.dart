@@ -11,17 +11,22 @@ class HomeController extends GetxController {
   late SharedPreferences prefs;
   final userName = ''.obs;
   final userEmail = ''.obs;
+  final userId = ''.obs;
 
   final count = 0.obs;
   @override
   void onInit() async {
+    await getUserDetails();
+    super.onInit();
+  }
+
+  getUserDetails() async {
     prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
-    userEmail.value = decodedToken['email'];
-    userName.value = decodedToken['name'];
-    print(userEmail.value);
-    print(userName.value);
-    super.onInit();
+    print(decodedToken);
+    userEmail.value = decodedToken['userId']['email'];
+    userName.value = decodedToken['userId']['name'];
+    userId.value=decodedToken['userId']['_id'];
   }
 }

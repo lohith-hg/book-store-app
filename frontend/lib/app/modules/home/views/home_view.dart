@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../constants/colors.dart';
 import '../../books/views/books_view.dart';
+import '../../purchased/views/purchased_view.dart';
 import '../../wishlist/views/wishlist_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -18,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
   static List<Widget> screens = <Widget>[
     BooksView(),
     WishlistView(),
+    PurchasedView(),
     ProfileView(),
   ];
 
@@ -49,17 +51,22 @@ class _HomeViewState extends State<HomeView> {
             icon: Icon(
               Icons.library_books,
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             label: 'Books',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             label: 'Wishlist',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            backgroundColor: Colors.white,
+            label: 'Purchased',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             label: 'Profile',
           ),
         ],
