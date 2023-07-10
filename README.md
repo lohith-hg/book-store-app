@@ -1,5 +1,24 @@
 # book-store-app
 
+## Tech Stack
+
+- **Front-end**: 
+  - Flutter
+  - Dart
+  - GetX
+
+- **Back-end**:
+  - Node.js
+  - Express.js
+  - MongoDB
+  - Mongoose
+
+- **Database**:
+  - MongoDB
+
+- **Authentication/Authorization**:
+  - JWT (JSON Web Tokens)
+
 # Project Models
 ## Book Schema
 Description: Represents a book in the application.
