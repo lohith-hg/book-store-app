@@ -3,6 +3,7 @@ part 'book.g.dart';
 
 @JsonSerializable()
 class Book {
+  String? uid;
   String? id;
   String? title;
   String? author;
@@ -13,6 +14,7 @@ class Book {
   String? category;
 
   Book({
+    this.uid,
     this.id,
     this.title,
     this.author,
@@ -23,6 +25,6 @@ class Book {
     this.category,
   });
 
-     factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
   Map<String, dynamic> toJson() => _$BookToJson(this);
 }

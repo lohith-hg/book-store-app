@@ -1,23 +1,18 @@
+import 'package:book_store_app/app/modules/home/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
-class ProfileController extends GetxController {
-  //TODO: Implement ProfileController
+import '../../../service/auth_service.dart';
 
-  final count = 0.obs;
+class ProfileController extends GetxController {
+  AuthService authService = Get.find();
+  HomeController homeController = Get.find();
+
+  get editMode => null;
+
   @override
-  void onInit() {
+  void onInit() async{
+    await homeController.getUserDetails();
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

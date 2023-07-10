@@ -6,6 +6,7 @@ import '../../../widgets/custom_button.dart';
 import '../controllers/books_controller.dart';
 import 'components/book_detail_screen.dart';
 import 'components/book_viewer.dart';
+import 'components/search_field.dart';
 
 class BooksView extends GetView<BooksController> {
   const BooksView({Key? key}) : super(key: key);
@@ -15,7 +16,8 @@ class BooksView extends GetView<BooksController> {
       return Scaffold(
         backgroundColor: tertiaryColor.withOpacity(0.3),
         appBar: AppBar(
-          backgroundColor: tertiaryColor.withOpacity(0.3),
+          backgroundColor: Colors.transparent,
+          scrolledUnderElevation: 0.0,
           title: const Text(
             'All Books',
             style: TextStyle(color: Colors.black),
@@ -34,67 +36,92 @@ class BooksView extends GetView<BooksController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Search(
+                      w: Get.width - 32,
+                      hintText: "Search Books",
+                      onTap: () async {
+                        controller.activeSearch.value = false;
+                        if (controller.searchController.text.isNotEmpty) {
+                          controller.isSearching.value = true;
+                          await controller.searchBooks(
+                              searchText:
+                                  controller.searchController.text.trim());
+                        } else {
+                          controller.searchController.clear();
+                          controller.activeSearch.value = false;
+                          controller.isSearching.value = false;
+                          await controller.getAllBooks();
+                        }
+                        controller.activeSearch.value = true;
+                      },
+                      textEditingController: controller.searchController,
+                      isActive: false,
+                      isCancel: controller.activeSearch.value,
+                      onCancel: () async {
+                        controller.searchController.clear();
+                        controller.activeSearch.value = false;
+                        controller.isSearching.value = false;
+                        await controller.getAllBooks();
+                      },
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16, top: 22),
-                          child: Text(
-                            "Newly Added",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        SizedBox(
-                          width: Get.width,
-                          height: Get.height / 1.9,
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                              disableCenter: false,
-                              autoPlay: true,
-                              viewportFraction: 0.6,
-                              aspectRatio: 98 / 152,
-                              enlargeCenterPage: true,
+                        if (!controller.isSearching.value)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 16, top: 22),
+                            child: Text(
+                              "Newly Added",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600),
                             ),
-                            items: [
-                              ...List.generate(
-                                controller.allBooks.length,
-                                (index) {
-                                  return InkWell(
-                                    onTap: () async {
-                                      controller.selectedBook.value =
-                                          controller.allBooks[index];
-                                      await controller
-                                          .createFileOfPdfUrl()
-                                          .then((f) {
-                                        controller.currectPdfPath.value =
-                                            f.path;
-                                      });
-                                      Get.to(PDFScreen(
-                                          path:
-                                              controller.currectPdfPath.value));
-                                    },
-                                    child: SizedBox(
-                                      height: Get.height / 3.2,
-                                      width: Get.width - 60,
-                                      child: Image.network(
-                                        controller
-                                            .allBooks[index].coverImageUrl!,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
                           ),
-                        ),
+                        if (!controller.isSearching.value)
+                          SizedBox(
+                            width: Get.width,
+                            height: Get.height / 1.9,
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                disableCenter: false,
+                                autoPlay: true,
+                                viewportFraction: 0.6,
+                                aspectRatio: 98 / 152,
+                                enlargeCenterPage: true,
+                              ),
+                              items: [
+                                ...List.generate(
+                                  controller.allBooks.length,
+                                  (index) {
+                                    return InkWell(
+                                      onTap: () async {
+                                        controller.selectedBook.value =
+                                              controller.allBooks[index];
+                                          Get.to(const BookDetailScreen());
+                                      },
+                                      child: SizedBox(
+                                        height: Get.height / 3.2,
+                                        width: Get.width - 60,
+                                        child: Image.network(
+                                          controller
+                                              .allBooks[index].coverImageUrl!,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 16, top: 22, bottom: 12),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 16, top: 22, bottom: 12),
                       child: Text(
-                        "All Books",
-                        style: TextStyle(
+                        (controller.isSearching.value)
+                            ? "Search Results"
+                            : "All Books",
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w600),
                       ),
                     ),

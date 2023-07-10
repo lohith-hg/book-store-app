@@ -5,17 +5,18 @@ import 'package:get/get.dart';
 import '../../../constants/colors.dart';
 import '../../../widgets/custom_button.dart';
 import '../../books/views/components/book_detail_screen.dart';
-import '../controllers/wishlist_controller.dart';
+import '../../books/views/components/book_viewer.dart';
+import '../controllers/purchased_controller.dart';
 
-class WishlistView extends GetView<WishlistController> {
-  const WishlistView({Key? key}) : super(key: key);
+class PurchasedView extends GetView<PurchasedController> {
+  const PurchasedView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Wishlist',
+            'Purchased',
             style: TextStyle(color: secondaryColor),
           ),
           centerTitle: true,
@@ -23,7 +24,7 @@ class WishlistView extends GetView<WishlistController> {
           scrolledUnderElevation: 0.0,
           backgroundColor: primaryColor,
         ),
-        body: (controller.booksController.isWishListLoading.value)
+        body: (controller.booksController.isPurchaseLoading.value)
             ? const Center(
                 child: CircularProgressIndicator(
                   color: secondaryColor,
@@ -33,7 +34,7 @@ class WishlistView extends GetView<WishlistController> {
                 child: Column(
                   children: [
                     ...List.generate(
-                      controller.booksController.wishlistBooks.length,
+                      controller.booksController.purchasedBooks.length,
                       (index) {
                         return Container(
                           width: Get.width - 32,
@@ -52,7 +53,7 @@ class WishlistView extends GetView<WishlistController> {
                                   borderRadius: BorderRadius.circular(12),
                                   child: Image.network(
                                     controller.booksController
-                                        .wishlistBooks[index].coverImageUrl!,
+                                        .purchasedBooks[index].coverImageUrl!,
                                     width: 120,
                                   ),
                                 ),
@@ -71,7 +72,7 @@ class WishlistView extends GetView<WishlistController> {
                                             left: 4, top: 8, bottom: 8),
                                         child: Text(
                                           controller.booksController
-                                              .wishlistBooks[index].title!,
+                                              .purchasedBooks[index].title!,
                                           style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600),
@@ -83,7 +84,7 @@ class WishlistView extends GetView<WishlistController> {
                                         child: Text(
                                           controller
                                               .booksController
-                                              .wishlistBooks[index]
+                                              .purchasedBooks[index]
                                               .description!,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -96,7 +97,7 @@ class WishlistView extends GetView<WishlistController> {
                                         padding:
                                             const EdgeInsets.only(bottom: 8),
                                         child: Text(
-                                          "Category : ${controller.booksController.wishlistBooks[index].category!}",
+                                          "Category : ${controller.booksController.purchasedBooks[index].category!}",
                                           style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
@@ -106,20 +107,24 @@ class WishlistView extends GetView<WishlistController> {
                                         padding:
                                             const EdgeInsets.only(bottom: 8),
                                         child: Text(
-                                          "Price : ₹${controller.booksController.wishlistBooks[index].price!}",
+                                          "Price : ₹${controller.booksController.purchasedBooks[index].price!}",
                                           style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700),
                                         ),
                                       ),
                                       CustomButton(
-                                        name: "Buy",
-                                        onTap: () {
-                                          controller.booksController
-                                                  .selectedBook.value =
-                                              controller.booksController
-                                                  .wishlistBooks[index];
-                                          Get.to(const BookDetailScreen());
+                                        name: "View",
+                                        onTap: () async {
+                                          await controller.booksController
+                                              .createFileOfPdfUrl()
+                                              .then((f) {
+                                            controller.booksController
+                                                .currectPdfPath.value = f.path;
+                                          });
+                                          Get.to(PDFScreen(
+                                              path: controller.booksController
+                                                  .currectPdfPath.value));
                                         },
                                       )
                                     ],
