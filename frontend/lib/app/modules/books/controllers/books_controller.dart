@@ -78,8 +78,6 @@ class BooksController extends GetxController {
     try {
       var response = await dio.post(
           'https://book-store-app-kkpj.onrender.com/users/${homeController.userId}/wishlist/${selectedBook.value.uid}');
-      print("add to wishlist response");
-      print(response);
       addedToWishlist.value = true;
       await getWishListBooks();
     } catch (e) {
@@ -106,8 +104,6 @@ class BooksController extends GetxController {
     try {
       var response = await dio.post(
           'https://book-store-app-kkpj.onrender.com/users/${homeController.userId}/purchasedBooks/${selectedBook.value.uid}');
-      print("add to wishlist response");
-      print(response);
       await getPurchasedBooks();
     } catch (e) {
       rethrow;

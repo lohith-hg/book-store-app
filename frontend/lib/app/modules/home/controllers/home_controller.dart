@@ -5,9 +5,11 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../service/auth_service.dart';
+import '../../books/controllers/books_controller.dart';
 
 class HomeController extends GetxController {
   AuthService authService = Get.find();
+  BooksController booksController = Get.find();
   late SharedPreferences prefs;
   final userName = ''.obs;
   final userEmail = ''.obs;

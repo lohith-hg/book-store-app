@@ -1,8 +1,10 @@
+import 'package:book_store_app/app/modules/books/controllers/books_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modules/home/controllers/home_controller.dart';
 import '../routes/app_pages.dart';
 
 class AuthService extends GetxService {
@@ -27,14 +29,11 @@ class AuthService extends GetxService {
     if (isAuthenticated == true) {
       Get.rootDelegate.offNamed(AppPages.HOME);
     }
-    print(_isAuthenticated);
   }
 
   checkAuthStatus() async {
     prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
-    print("Is exprieddd");
-    print(token);
     if (token=='' ||JwtDecoder.isExpired(token!)) {
       logout();
       await setAuthenticated();
@@ -53,7 +52,6 @@ class AuthService extends GetxService {
       prefs = await SharedPreferences.getInstance();
       if (response.statusCode == 200) {
         final token = response.data['token'];
-        print(token);
         prefs.setString("token", token);
         Get.rootDelegate.offNamed(AppPages.HOME);
         prefs.setBool("isLoggedIn", true);
@@ -65,8 +63,6 @@ class AuthService extends GetxService {
 
   Future<void> signup(String name, String email, String password) async {
     try {
-      print("Step 1");
-
       Map<String, dynamic> data = {
         'name': name,
         'email': email,
@@ -80,17 +76,13 @@ class AuthService extends GetxService {
           contentType: Headers.formUrlEncodedContentType,
         ),
       );
-      print("Step 2");
       prefs = await SharedPreferences.getInstance();
-      print("Step 3");
       if (response.statusCode == 201) {
         final token = response.data['token'];
-        print(token);
         prefs.setString("token", token);
         Get.rootDelegate.offNamed(AppPages.HOME);
         prefs.setBool("isLoggedIn", true);
       }
-      print("Step 4");
     } catch (e) {
       print(e.toString());
       throw Exception('Signup failed');
